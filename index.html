@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter TOTP Code</title>
+    <title>Verify TOTP</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +21,7 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 300px;
         }
         .error {
             color: red;
@@ -29,12 +30,12 @@
     </style>
 </head>
 <body>
-    <div id="api" class="container">
+    <div class="container">
         <h2>Enter TOTP Code</h2>
         <div id="error" class="error">
             <p id="errorMessage"></p>
         </div>
-        <form id="totpForm">
+        <form id="api" method="post" action="">
             <input type="text" id="totpCode" name="totpCode" placeholder="Enter your TOTP code" required>
             <button type="submit">Submit</button>
         </form>
@@ -45,27 +46,11 @@
             var errorElement = document.getElementById("errorMessage");
             var urlParams = new URLSearchParams(window.location.search);
             var error = urlParams.get('error');
-            if (error === 'AADB2C90157') {
-                errorElement.innerText = "Número máximo de tentativas excedido. Por favor, tente novamente mais tarde.";
+            if (error) {
+                errorElement.innerText = decodeURIComponent(error);
                 document.getElementById("error").style.display = 'block';
             }
         });
-
-        document.getElementById("totpForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            // Simulate form submission and error handling
-            var totpCode = document.getElementById("totpCode").value;
-            if (totpCode !== "123456") { // Simulate invalid code
-                var errorMessage = "Invalid TOTP code. Please try again.";
-                showError(errorMessage);
-            }
-        });
-
-        function showError(message) {
-            var errorElement = document.getElementById("errorMessage");
-            errorElement.innerText = message;
-            document.getElementById("error").style.display = 'block';
-        }
     </script>
 </body>
 </html>
