@@ -27,52 +27,49 @@
             color: red;
             display: none;
         }
-        #api {
-            display: none; /* Ocultar a div padrão do B2C */
-        }
     </style>
 </head>
 <body>
-    <div id="custom-container" class="container">
+    <div id="api" class="container">
         <h2>Enter TOTP Code</h2>
         <p>Please provide the following details.</p>
         <ul>
             <li>Enter the verification code from your authenticator app.</li>
             <li>
-                Enter your code. <input type="text" id="totpCode" name="totpCode" placeholder="Enter your code." required>
+                Enter your code. <input type="text" id="totpCode" name="otpCode" placeholder="Enter your code." required>
             </li>
         </ul>
         <div id="error" class="error">
             <p id="errorMessage"></p>
         </div>
-        <button id="verifyButton" type="button">Verify</button>
+        <button id="verifyButton" type="submit">Verify</button>
         <button type="button" onclick="window.location.href='/';">Cancel</button>
     </div>
 
-    <div id="api"></div> <!-- Div padrão do B2C, escondida -->
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Esconder a div padrão do B2C e mostrar o container customizado
-            document.getElementById("api").style.display = 'none';
-            document.getElementById("custom-container").style.display = 'block';
-
             var errorElement = document.getElementById("errorMessage");
             var urlParams = new URLSearchParams(window.location.search);
             var error = urlParams.get('error');
             if (error && error.includes('AADB2C90157')) {
                 errorElement.innerText = "Número máximo de tentativas excedido. Por favor, tente novamente mais tarde.";
                 document.getElementById("error").style.display = 'block';
+            } else {
+                // Check for other errors
+                var generalError = urlParams.get('error_description');
+                if (generalError) {
+                    errorElement.innerText = decodeURIComponent(generalError.replace(/\+/g, ' '));
+                    document.getElementById("error").style.display = 'block';
+                }
             }
         });
 
-        document.getElementById("verifyButton").addEventListener("click", function() {
-            // Aqui você pode adicionar a lógica de validação ou envio do código TOTP
+        // Event listener for the Verify button
+        document.getElementById("verifyButton").addEventListener("click", function(event) {
             var totpCode = document.getElementById("totpCode").value;
             if (!totpCode) {
                 showError("Por favor, insira o código TOTP.");
-            } else {
-                // Adicione a lógica de verificação ou envio do código TOTP
+                event.preventDefault(); // Prevent form submission if the code is empty
             }
         });
 
