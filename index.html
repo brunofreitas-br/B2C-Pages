@@ -30,12 +30,12 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="api" class="container">
         <h2>Enter TOTP Code</h2>
         <div id="error" class="error">
             <p id="errorMessage"></p>
         </div>
-        <form id="api" method="post" action="">
+        <form id="totpForm">
             <input type="text" id="totpCode" name="totpCode" placeholder="Enter your TOTP code" required>
             <button type="submit">Submit</button>
         </form>
@@ -46,8 +46,8 @@
             var errorElement = document.getElementById("errorMessage");
             var urlParams = new URLSearchParams(window.location.search);
             var error = urlParams.get('error');
-            if (error) {
-                errorElement.innerText = decodeURIComponent(error);
+            if (error === 'AADB2C90157') {
+                errorElement.innerText = "Número máximo de tentativas excedido. Por favor, tente novamente mais tarde.";
                 document.getElementById("error").style.display = 'block';
             }
         });
